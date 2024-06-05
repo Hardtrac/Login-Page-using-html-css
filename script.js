@@ -1,48 +1,64 @@
-const form = document.querySelector("form");
-eField = form.querySelector(".email"),
-    eInput = eField.querySelector("input"),
-    pField = form.querySelector(".password"),
-    pInput = pField.querySelector("input");
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector("form");
+    const eField = form.querySelector(".field.email"),
+        eInput = eField.querySelector("input"),
+        pField = form.querySelector(".field.password"),
+        pInput = pField.querySelector("input");
+    const showPasswordCheckbox = document.getElementById('show-password');
 
-form.onsubmit = (e) => {
-    e.preventDefault();
+    showPasswordCheckbox.addEventListener('change', () => {
+        pInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+    });
 
-    (eInput.value == "") ? eField.classList.add("shake", "error"): checkEmail();
-    (pInput.value == "") ? pField.classList.add("shake", "error"): checkPass();
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        console.log('Form submission prevented');
 
-    setTimeout(() => {
-        eField.classList.remove("shake");
-        pField.classList.remove("shake");
-    }, 500);
+        (eInput.value == "") ? eField.classList.add("shake", "error") : checkEmail();
+        (pInput.value == "") ? pField.classList.add("shake", "error") : checkPass();
 
-    eInput.onkeyup = () => { checkEmail(); }
-    pInput.onkeyup = () => { checkPass(); }
+        setTimeout(() => {
+            eField.classList.remove("shake");
+            pField.classList.remove("shake");
+        }, 500);
 
-    function checkEmail() {
-        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-        if (!eInput.value.match(pattern)) {
-            eField.classList.add("error");
-            eField.classList.remove("valid");
-            let errorTxt = eField.querySelector(".error-txt");
+        eInput.onkeyup = () => { checkEmail(); }
+        pInput.onkeyup = () => { checkPass(); }
 
-            (eInput.value != "") ? errorTxt.innerText = "Enter a valid email address": errorTxt.innerText = "Email can't be blank";
+        function checkEmail() {
+            const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            const errorTxt = eField.querySelector(".error-txt");
+            if (!eInput.value.match(pattern)) {
+                eField.classList.add("error");
+                eField.classList.remove("valid");
+                eInput.value != "" ? errorTxt.innerText = "Enter a valid email address" : errorTxt.innerText = "Email can't be blank";
+                console.log('Invalid email');
+            } else {
+                eField.classList.remove("error");
+                eField.classList.add("valid");
+                console.log('Valid email');
+            }
+        }
+
+        function checkPass() {
+            const errorTxt = pField.querySelector(".error-txt");
+            if (pInput.value == "") {
+                pField.classList.add("error");
+                pField.classList.remove("valid");
+                errorTxt.innerText = "Password can't be blank";
+                console.log('Password is blank');
+            } else {
+                pField.classList.remove("error");
+                pField.classList.add("valid");
+                console.log('Valid password');
+            }
+        }
+
+        if (!eField.classList.contains("error") && !pField.classList.contains("error")) {
+            console.log('Redirecting to:', form.getAttribute("action"));
+            window.location.href = form.getAttribute("action");
         } else {
-            eField.classList.remove("error");
-            eField.classList.add("valid");
+            console.log('Form contains errors');
         }
     }
-
-    function checkPass() {
-        if (pInput.value == "") {
-            pField.classList.add("error");
-            pField.classList.remove("valid");
-        } else {
-            pField.classList.remove("error");
-            pField.classList.add("valid");
-        }
-    }
-
-    if (!eField.classList.contains("error") && !pField.classList.contains("error")) {
-        window.location.href = form.getAttribute("action");
-    }
-}
+});
