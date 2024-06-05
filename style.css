@@ -144,6 +144,23 @@ form .field.error .error {
 form .pass-txt {
     text-align: left;
     margin-top: -10px;
+    display: flex;
+    align-items: center;
+}
+
+form .pass-txt a {
+    flex: 1;
+    color: #5372F0;
+}
+
+form .pass-txt label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+form .pass-txt label input {
+    margin-right: 5px;
 }
 
 .wrapper a {
